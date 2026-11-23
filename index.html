@@ -1,0 +1,949 @@
+<title>Akhilesh Reddipalli</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<style>
+  /* Layout: single-column scroll with sticky nav; dark-first technical palette, cyan accent for the data/simulation subject */
+  :root {
+    --bg: #0e1116;
+    --surface: #161b22;
+    --surface-2: #1c232d;
+    --fg: #e6edf3;
+    --muted: #8b97a6;
+    --line: #262d38;
+    --accent: #36c6d3;
+    --accent-ink: #06141a;
+    --max: 1080px;
+    --fs-display: clamp(2.4rem, 6vw, 4rem);
+    --fs-h2: clamp(1.5rem, 3.2vw, 2.1rem);
+    color-scheme: dark;
+    --font-display: "Space Grotesk", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f6f8fa;
+      --surface: #ffffff;
+      --surface-2: #eef2f6;
+      --fg: #141a21;
+      --muted: #5a6672;
+      --line: #e0e6ec;
+      --accent: #0f8f9b;
+      --accent-ink: #ffffff;
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface-2: #eef2f6;
+    --fg: #141a21;
+    --muted: #5a6672;
+    --line: #e0e6ec;
+    --accent: #0f8f9b;
+    --accent-ink: #ffffff;
+    color-scheme: light;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+    text-wrap: balance;
+    margin: 0;
+  }
+  a {
+    color: inherit;
+  }
+  .wrap {
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-left: max(20px, env(safe-area-inset-left, 0px));
+    padding-right: max(20px, env(safe-area-inset-right, 0px));
+  }
+  .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* nav */
+  header.nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 21;
+    background: var(--bg);
+  }
+  .nav-in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.85rem;
+  }
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .brand b {
+    color: var(--accent);
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.4rem;
+    font-size: 0.92rem;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .nav-links a:hover {
+    color: var(--fg);
+  }
+  @media (max-width: 620px) {
+    .nav-links {
+      display: none;
+    }
+  }
+
+  section {
+    padding-block: clamp(3rem, 7vw, 5.5rem);
+  }
+  .sec-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .sec-head h2 {
+    font-size: var(--fs-h2);
+  }
+
+  /* hero */
+  .hero {
+    margin-top: calc(-1 * env(safe-area-inset-top, 0px));
+    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(3rem, 8vw, 6rem));
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      60% 80% at 80% 0%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+  .hero .wrap {
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-size: var(--fs-display);
+    font-weight: 700;
+    margin-top: 0.6rem;
+    max-width: 16ch;
+  }
+  .hero p.lead {
+    font-size: clamp(1.05rem, 2.3vw, 1.3rem);
+    color: var(--muted);
+    max-width: 60ch;
+    margin-top: 1.1rem;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.8rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.15rem;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    transition: transform 0.08s ease, border-color 0.15s;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+  .btn.ghost {
+    background: var(--surface);
+    color: var(--fg);
+  }
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-top: 1.6rem;
+    font-size: 0.92rem;
+  }
+  .socials a {
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .socials a:hover {
+    color: var(--accent);
+  }
+
+  /* about */
+  .about p {
+    max-width: 68ch;
+    color: var(--fg);
+    font-size: 1.05rem;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+  }
+  .chip {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* projects */
+  .projects {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.5rem 1.5rem 1.6rem;
+    min-width: 0;
+  }
+  .card .tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .card h3 {
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+  }
+  .card .where {
+    color: var(--muted);
+    font-size: 0.86rem;
+    margin-top: 0.25rem;
+  }
+  .card p {
+    margin: 0.85rem 0 0;
+    color: var(--fg);
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+  .stack span {
+    font-size: 0.76rem;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 0.22rem 0.55rem;
+    border-radius: 6px;
+  }
+
+  /* videos */
+  .videos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.1rem;
+  }
+  .vid {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .vid .poster {
+    aspect-ratio: 16/9;
+    max-width: 100%;
+    background: linear-gradient(
+      135deg,
+      var(--surface-2),
+      color-mix(in srgb, var(--accent) 22%, var(--surface-2))
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .vid .poster .play {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .vid .poster .play::after {
+    content: "";
+    border-left: 14px solid var(--accent);
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    margin-left: 4px;
+  }
+  .vid .meta {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+  .vid h3 {
+    font-size: 1.02rem;
+  }
+  .vid p {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin: 0.4rem 0 0;
+  }
+  .vid a.watch {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 1rem;
+  }
+
+  /* skills + education grid */
+  .two {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.1rem;
+  }
+  @media (max-width: 720px) {
+    .two {
+      grid-template-columns: 1fr;
+    }
+  }
+  .skillgroup {
+    margin-bottom: 1.1rem;
+  }
+  .skillgroup h4 {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+  .edu-item {
+    padding: 0.2rem 0;
+  }
+  .edu-item strong {
+    display: block;
+  }
+  .edu-item span {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  /* contact */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+  }
+  @media (max-width: 720px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 0.35rem;
+  }
+  input,
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    color: var(--fg);
+    font: inherit;
+    padding: 0.65rem 0.8rem;
+  }
+  input:focus,
+  textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  .field {
+    margin-bottom: 0.9rem;
+  }
+  .direct {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.4rem;
+  }
+  .direct .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .direct .row:last-child {
+    border-bottom: 0;
+  }
+  .direct .row a,
+  .direct .row span.val {
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 0.92rem;
+    word-break: break-all;
+  }
+  .copy {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 7px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    flex: none;
+  }
+  .copy:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .formnote {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.6rem;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .toggle {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+</style>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="brand">Akhilesh <b>Reddipalli</b></div>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#thesis">Thesis</a>
+      <a href="#skills">Skills</a>
+      <a href="#documents">Documents</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="toggle" id="themeBtn" aria-label="Switch theme">
+      Theme
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Software Developer</span>
+    <h1>Real-time 3D data interfaces on simulation backends.</h1>
+    <p class="lead">
+      M.Sc. in Computational Modelling and Simulation (TU Dresden). I build
+      full-stack applications that turn simulation and sensor data into
+      interactive 3D interfaces people can read and act on, with Python backends
+      and Three.js/WebGL frontends.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="#projects">View projects</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
+      <a
+        class="btn ghost"
+        id="cvBtn"
+        href="https://drive.google.com/file/d/1PlKKCFIY9pjSUZO-nFsyHLOt2nH5Bc9S/view?usp=sharing"
+        target="_blank"
+        rel="noopener"
+        >Download CV (PDF)</a
+      >
+    </div>
+    <div class="socials">
+      <a href="https://github.com/Akhilesh7176" target="_blank" rel="noopener"
+        >GitHub: github.com/Akhilesh7176</a
+      >
+      <a
+        href="https://linkedin.com/in/akhileshreddipalli"
+        target="_blank"
+        rel="noopener"
+        >LinkedIn: /in/akhileshreddipalli</a
+      >
+      <a href="mailto:akhileshreddipalli@gmail.com"
+        >akhileshreddipalli@gmail.com</a
+      >
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">About</span>
+      <h2>What I work on</h2>
+    </div>
+    <p>
+      I am a software developer with a background in computational modelling and
+      mechanical engineering. My work sits where simulation, data, and the
+      browser meet: implementing models, designing REST APIs around them, and
+      building the real-time 3D front ends that make the output usable. I built
+      two applications end to end during my M.Sc., and I am comfortable owning a
+      feature from the data model through to what the user sees on screen.
+    </p>
+    <div class="facts">
+      <span class="chip">Munich, open to relocation (DACH)</span>
+      <span class="chip">Python / Django</span>
+      <span class="chip">TypeScript / Angular / React</span>
+      <span class="chip">Three.js / WebGL</span>
+      <span class="chip">PostgreSQL</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Selected work</span>
+      <h2>Projects</h2>
+    </div>
+    <div class="projects">
+      <article class="card">
+        <span class="tag">M.Sc. Thesis</span>
+        <h3>Real-Time 3D Traffic Simulator</h3>
+        <div class="where">
+          Institute of Economics and Transport, TU Dresden
+        </div>
+        <p>
+          A browser-based microscopic traffic simulator implementing the
+          Intelligent Driver Model. Python/Django REST backend, Three.js/WebGL
+          frontend rendering live vehicle behaviour in 3D. Road networks were
+          built from OpenStreetMap data, and simulated behaviour was calibrated
+          against real drone-captured vehicle trajectories (MiTra dataset,
+          Milan).
+        </p>
+        <div class="stack">
+          <span>Python</span><span>Django</span><span>REST</span
+          ><span>Three.js</span><span>WebGL</span><span>PostgreSQL</span
+          ><span>Intelligent Driver Model</span>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag">Research project (CMS-PRO)</span>
+        <h3>Fuzzy-Logic Adaptive Genetic Algorithm</h3>
+        <div class="where">
+          Institute of Lightweight Engineering, TU Dresden
+        </div>
+        <p>
+          A Python optimisation pipeline for generating compliant mechanisms,
+          coupling a genetic algorithm to ANSYS MAPDL simulations in the
+          evaluation loop. A fuzzy-logic controller adapted the search
+          parameters during the run, improving convergence speed by 15% and
+          reducing how often the search settled in local minima.
+        </p>
+        <div class="stack">
+          <span>Python</span><span>NumPy</span><span>SciPy</span
+          ><span>ANSYS MAPDL</span><span>Genetic Algorithms</span
+          ><span>Fuzzy Logic</span>
+        </div>
+      </article>
+      <article class="card">
+        <span class="tag">Research assistant (WHK)</span>
+        <h3>Browser-Based 3D Model Viewer</h3>
+        <div class="where">TU Dresden, under Dr. Martin Erler</div>
+        <p>
+          A viewer that renders 3D models directly in the browser, with the OBJ
+          and MTL parsing written from scratch so files display without a native
+          client. Built with Three.js and WebGL, with work on load performance
+          for high-resolution models and support for displaying several models
+          at once.
+        </p>
+        <div class="stack">
+          <span>JavaScript</span><span>Three.js</span><span>WebGL</span
+          ><span>OBJ / MTL parsing</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="thesis">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Showcase</span>
+      <h2>Thesis in motion</h2>
+    </div>
+    <div class="videos">
+      <article class="vid" style="max-width: 440px">
+        <div class="poster"><div class="play" aria-hidden="true"></div></div>
+        <div class="meta">
+          <h3>Simulator overview</h3>
+          <p>
+            Walkthrough of the real-time 3D traffic simulation running in the
+            browser.
+          </p>
+          <a
+            class="watch"
+            href="https://drive.google.com/file/d/1mynV1AA8o7iWwcuC-ilJ6K8TXwYSr8FO/view?usp=sharing"
+            target="_blank"
+            rel="noopener"
+            >Watch video</a
+          >
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Toolkit</span>
+      <h2>Skills &amp; education</h2>
+    </div>
+    <div class="two">
+      <div>
+        <div class="skillgroup">
+          <h4>Languages</h4>
+          <div class="stack">
+            <span>Python</span><span>JavaScript</span><span>TypeScript</span
+            ><span>SQL</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Frontend</h4>
+          <div class="stack">
+            <span>Angular</span><span>React</span><span>Three.js</span
+            ><span>WebGL</span><span>HTML / CSS</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Backend &amp; data</h4>
+          <div class="stack">
+            <span>Django</span><span>REST APIs</span><span>PostgreSQL</span
+            ><span>NumPy</span><span>SciPy</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Tools</h4>
+          <div class="stack">
+            <span>Git</span><span>Docker</span><span>AWS (foundational)</span>
+          </div>
+        </div>
+        <div class="skillgroup">
+          <h4>Languages (spoken)</h4>
+          <div class="stack">
+            <span>English (fluent)</span><span>German (B2)</span
+            ><span>Telugu</span><span>Hindi</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="skillgroup">
+          <h4>Education</h4>
+          <div class="edu-item">
+            <strong>M.Sc. Computational Modelling and Simulation</strong
+            ><span>Technische Universität Dresden, 2025</span>
+          </div>
+          <div class="edu-item" style="margin-top: 0.8rem">
+            <strong>B.Tech. Mechanical Engineering</strong
+            ><span>GITAM University, Visakhapatnam, 2019</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="documents">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Credentials</span>
+      <h2>Documents</h2>
+    </div>
+    <div class="direct">
+      <div class="row">
+        <span>M.Sc. certificate (TU Dresden)</span
+        ><a
+          href="https://drive.google.com/file/d/1HJMMiXvz235ZQe4B8JAfIpvkvCnQ1Ald/view?usp=sharing"
+          target="_blank"
+          rel="noopener"
+          >View / download PDF</a
+        >
+      </div>
+      <div class="row">
+        <span>B.Tech. certificate (GITAM)</span
+        ><a
+          href="https://drive.google.com/file/d/1Jj6KYnYySDTqJttdQO7FWhNzp8wFZq0L/view?usp=sharing"
+          target="_blank"
+          rel="noopener"
+          >View / download PDF</a
+        >
+      </div>
+      <div class="row">
+        <span>Master's thesis grade / report</span
+        ><a
+          href="https://drive.google.com/file/d/1x9NSSnkrPTUpk_xnBKnB0guL3ozqn_8c/view?usp=sharing"
+          target="_blank"
+          rel="noopener"
+          >View / download PDF</a
+        >
+      </div>
+      <div class="row">
+        <span>References</span
+        ><a
+          href="https://drive.google.com/file/d/1TbMY7GzvGvtNURWnOhDa-hnN4kzo82mD/view?usp=sharing"
+          target="_blank"
+          rel="noopener"
+          >View / download PDF</a
+        >
+      </div>
+    </div>
+    <p class="note">
+      Scans go to Drive (set to Anyone with the link); send me the links and I
+      will wire each row to open its PDF.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Contact</span>
+      <h2>Get in touch</h2>
+    </div>
+    <div class="contact-grid">
+      <form id="cform" novalidate>
+        <div class="field">
+          <label for="n">Name</label
+          ><input id="n" name="n" type="text" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="e">Your email</label
+          ><input id="e" name="e" type="email" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="m">Message</label
+          ><textarea id="m" name="m" rows="5"></textarea>
+        </div>
+        <button class="btn primary" type="submit">Compose email</button>
+        <p class="formnote" id="fn">
+          This opens an email to me with your message filled in.
+        </p>
+      </form>
+      <div class="direct">
+        <div class="row">
+          <span>Email</span
+          ><span class="val" id="em">akhileshreddipalli@gmail.com</span
+          ><button class="copy" data-copy="akhileshreddipalli@gmail.com">
+            Copy
+          </button>
+        </div>
+        <div class="row">
+          <span>GitHub</span
+          ><a
+            href="https://github.com/Akhilesh7176"
+            target="_blank"
+            rel="noopener"
+            >github.com/Akhilesh7176</a
+          ><button class="copy" data-copy="https://github.com/Akhilesh7176">
+            Copy
+          </button>
+        </div>
+        <div class="row">
+          <span>LinkedIn</span
+          ><a
+            href="https://linkedin.com/in/akhileshreddipalli"
+            target="_blank"
+            rel="noopener"
+            >/in/akhileshreddipalli</a
+          ><button
+            class="copy"
+            data-copy="https://linkedin.com/in/akhileshreddipalli"
+          >
+            Copy
+          </button>
+        </div>
+        <div class="row">
+          <span>CV (English)</span
+          ><a
+            href="https://drive.google.com/file/d/1PlKKCFIY9pjSUZO-nFsyHLOt2nH5Bc9S/view?usp=sharing"
+            target="_blank"
+            rel="noopener"
+            >View / download PDF</a
+          >
+        </div>
+        <div class="row">
+          <span>Lebenslauf (DE)</span
+          ><a
+            href="https://drive.google.com/file/d/1bzLuRDOvW9db1smtZyfMU8dZJiONWpJZ/view?usp=sharing"
+            target="_blank"
+            rel="noopener"
+            >View / download PDF</a
+          >
+        </div>
+        <div class="row">
+          <span>Location</span
+          ><span class="val">Munich, open to relocation across DACH</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Akhilesh Reddipalli, Software Developer. Munich, open to relocation across
+    the DACH region.
+  </div>
+</footer>
+
+<script>
+  // theme toggle (per-viewer convenience)
+  (function () {
+    var root = document.documentElement,
+      btn = document.getElementById("themeBtn");
+    try {
+      var s = localStorage.getItem("theme");
+      if (s) root.setAttribute("data-theme", s);
+    } catch (e) {}
+    btn.addEventListener("click", function () {
+      var cur = root.getAttribute("data-theme");
+      var dark = window.matchMedia("(prefers-color-scheme:dark)").matches;
+      var next = cur
+        ? cur === "dark"
+          ? "light"
+          : "dark"
+        : dark
+        ? "light"
+        : "dark";
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (e) {}
+    });
+  })();
+  // copy buttons
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var t = b.getAttribute("data-copy"),
+        old = b.textContent;
+      function done() {
+        b.textContent = "Copied";
+        setTimeout(function () {
+          b.textContent = old;
+        }, 1200);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(t)
+          .then(done)
+          .catch(function () {
+            window.getSelection();
+            done();
+          });
+      } else {
+        done();
+      }
+    });
+  });
+  // contact form -> compose mailto
+  document.getElementById("cform").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var n = document.getElementById("n").value.trim();
+    var e = document.getElementById("e").value.trim();
+    var m = document.getElementById("m").value.trim();
+    var subject = encodeURIComponent(
+      "Portfolio enquiry" + (n ? " from " + n : "")
+    );
+    var body = encodeURIComponent(
+      (m || "") +
+        "\n\n" +
+        (n ? "From: " + n + "\n" : "") +
+        (e ? "Reply to: " + e : "")
+    );
+    window.location.href =
+      "mailto:akhileshreddipalli@gmail.com?subject=" +
+      subject +
+      "&body=" +
+      body;
+    document.getElementById("fn").textContent =
+      "If your email app did not open, copy the address on the right and send your message there.";
+  });
+</script>
